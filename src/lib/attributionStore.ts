@@ -1,0 +1,399 @@
+// ==============================================================================
+// ATTRAD ATTRIBUTION STORE - Motor Reactivo Local / Adaptador Híbrido
+// Permite ejecutar toda la plataforma con persistencia en LocalStorage
+// y conectarse a Supabase de forma transparente.
+// ==============================================================================
+
+import { ClientRow, OrganizationRow, LeadRow, LeadStatus, CaptureLeadPayload, CaptureLeadResponse } from '../types/database';
+
+const STORAGE_KEYS = {
+  ORGS: 'attrad_organizations_v1',
+  CLIENTS: 'attrad_clients_v1',
+  LEADS: 'attrad_leads_v1',
+};
+
+// Datos semilla de demostración profesional
+const INITIAL_ORGS: OrganizationRow[] = [
+  {
+    id: 'org-nexus',
+    name: 'Nexus Media Agency',
+    slug: 'nexus-media',
+    owner_email: 'nexus@agencymedia.com',
+    custom_domain: 'panel.nexusmedia.com',
+    brand_logo_url: null,
+    brand_primary_color: '#4F46E5', // Indigo
+    is_active: true,
+    created_at: new Date(Date.now() - 60 * 86400000).toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  {
+    id: 'org-vanguard',
+    name: 'Vanguard Growth Lab',
+    slug: 'vanguard-lab',
+    owner_email: 'sofia@vanguardlab.com',
+    custom_domain: 'app.vanguardlab.com',
+    brand_logo_url: null,
+    brand_primary_color: '#0D9488', // Teal
+    is_active: true,
+    created_at: new Date(Date.now() - 40 * 86400000).toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+];
+
+const INITIAL_CLIENTS: ClientRow[] = [
+  {
+    id: 'client-sonrisas',
+    organization_id: 'org-nexus',
+    name: 'Clínica Dental Sonrisas',
+    slug: 'clinica-sonrisas',
+    industry: 'Salud y Odontología',
+    whatsapp_phone: '+52 55 9182 7364',
+    api_key: 'attrad_live_sonrisas_pk92',
+    secure_token: 'tok_sonrisas_8f14b2',
+    is_active: true,
+    created_at: new Date(Date.now() - 30 * 86400000).toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  {
+    id: 'client-valle',
+    organization_id: 'org-nexus',
+    name: 'Inmobiliaria Valle Real',
+    slug: 'valle-real',
+    industry: 'Bienes Raíces',
+    whatsapp_phone: '+52 81 2940 1827',
+    api_key: 'attrad_live_valle_pk38',
+    secure_token: 'tok_valle_3c99a1',
+    is_active: true,
+    created_at: new Date(Date.now() - 25 * 86400000).toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+  {
+    id: 'client-aura',
+    organization_id: 'org-vanguard',
+    name: 'Aura Joyería Fina',
+    slug: 'aura-joyas',
+    industry: 'E-commerce & Lujo',
+    whatsapp_phone: '+52 33 4819 0284',
+    api_key: 'attrad_live_aura_pk77',
+    secure_token: 'tok_aura_7e52d9',
+    is_active: true,
+    created_at: new Date(Date.now() - 20 * 86400000).toISOString(),
+    updated_at: new Date().toISOString(),
+  },
+];
+
+const INITIAL_LEADS: LeadRow[] = [
+  {
+    id: 'lead-1',
+    client_id: 'client-sonrisas',
+    organization_id: 'org-nexus',
+    ref_code: '#REF-842',
+    customer_phone: '+52 55 1122 3344',
+    customer_name: 'Dra. Patricia Montes',
+    ad_id: 'ad_meta_ortodoncia_01',
+    ad_name: 'Ortodoncia Invisible - Video Reel #1',
+    utm_source: 'meta',
+    utm_medium: 'paid_social',
+    utm_campaign: 'campana_ortodoncia_q4',
+    utm_content: 'video_antes_despues',
+    landing_url: 'https://clinicasonrisas.com/ortodoncia?ad_id=ad_meta_ortodoncia_01',
+    referrer: 'https://instagram.com/',
+    ip_hash: 'hash_8192a',
+    status: 'venta_cerrada',
+    sale_amount: 1450.00,
+    currency: 'USD',
+    notes: 'Tratamiento completo pagado de contado.',
+    attributed_at: new Date(Date.now() - 4 * 86400000).toISOString(),
+    closed_at: new Date(Date.now() - 1 * 86400000).toISOString(),
+    created_at: new Date(Date.now() - 4 * 86400000).toISOString(),
+  },
+  {
+    id: 'lead-2',
+    client_id: 'client-sonrisas',
+    organization_id: 'org-nexus',
+    ref_code: '#REF-195',
+    customer_phone: '+52 55 9988 7766',
+    customer_name: 'Roberto Gómez',
+    ad_id: 'ad_meta_ortodoncia_01',
+    ad_name: 'Ortodoncia Invisible - Video Reel #1',
+    utm_source: 'meta',
+    utm_medium: 'paid_social',
+    utm_campaign: 'campana_ortodoncia_q4',
+    utm_content: 'video_antes_despues',
+    landing_url: 'https://clinicasonrisas.com/ortodoncia?ad_id=ad_meta_ortodoncia_01',
+    referrer: 'https://instagram.com/',
+    ip_hash: 'hash_9921b',
+    status: 'cita_agendada',
+    sale_amount: 0.00,
+    currency: 'USD',
+    notes: 'Cita de valoración confirmada para el jueves.',
+    attributed_at: new Date(Date.now() - 2 * 86400000).toISOString(),
+    closed_at: null,
+    created_at: new Date(Date.now() - 2 * 86400000).toISOString(),
+  },
+  {
+    id: 'lead-3',
+    client_id: 'client-sonrisas',
+    organization_id: 'org-nexus',
+    ref_code: '#REF-603',
+    customer_phone: '+52 55 4433 2211',
+    customer_name: 'Mariana Silva',
+    ad_id: 'ad_meta_blanqueamiento_02',
+    ad_name: 'Blanqueamiento Láser 2x1',
+    utm_source: 'meta',
+    utm_medium: 'paid_social',
+    utm_campaign: 'promo_blanqueamiento_express',
+    utm_content: 'imagen_estatica_promo',
+    landing_url: 'https://clinicasonrisas.com/blanqueamiento?ad_id=ad_meta_blanqueamiento_02',
+    referrer: 'https://facebook.com/',
+    ip_hash: 'hash_1029c',
+    status: 'nuevo',
+    sale_amount: 0.00,
+    currency: 'USD',
+    notes: 'Hizo clic en WhatsApp hace 25 min.',
+    attributed_at: new Date(Date.now() - 25 * 60000).toISOString(),
+    closed_at: null,
+    created_at: new Date(Date.now() - 25 * 60000).toISOString(),
+  },
+  {
+    id: 'lead-4',
+    client_id: 'client-valle',
+    organization_id: 'org-nexus',
+    ref_code: '#REF-771',
+    customer_phone: '+52 81 1234 5678',
+    customer_name: 'Ing. Carlos Zambrano',
+    ad_id: 'ad_meta_departamentos_01',
+    ad_name: 'Lofts Preventa Zona San Pedro',
+    utm_source: 'meta',
+    utm_medium: 'paid_social',
+    utm_campaign: 'preventa_exclusiva_san_pedro',
+    utm_content: 'carrusel_amenidades',
+    landing_url: 'https://vallereal.com/preventa?ad_id=ad_meta_departamentos_01',
+    referrer: 'https://instagram.com/',
+    ip_hash: 'hash_5514d',
+    status: 'venta_cerrada',
+    sale_amount: 4800.00,
+    currency: 'USD',
+    notes: 'Separación y enganche de departamento ejecutado.',
+    attributed_at: new Date(Date.now() - 10 * 86400000).toISOString(),
+    closed_at: new Date(Date.now() - 3 * 86400000).toISOString(),
+    created_at: new Date(Date.now() - 10 * 86400000).toISOString(),
+  },
+];
+
+class AttributionStore {
+  private listeners: Set<() => void> = new Set();
+
+  constructor() {
+    this.ensureInitialized();
+  }
+
+  private ensureInitialized() {
+    if (typeof window === 'undefined') return;
+    if (!localStorage.getItem(STORAGE_KEYS.ORGS)) {
+      localStorage.setItem(STORAGE_KEYS.ORGS, JSON.stringify(INITIAL_ORGS));
+    }
+    if (!localStorage.getItem(STORAGE_KEYS.CLIENTS)) {
+      localStorage.setItem(STORAGE_KEYS.CLIENTS, JSON.stringify(INITIAL_CLIENTS));
+    }
+    if (!localStorage.getItem(STORAGE_KEYS.LEADS)) {
+      localStorage.setItem(STORAGE_KEYS.LEADS, JSON.stringify(INITIAL_LEADS));
+    }
+  }
+
+  public subscribe(listener: () => void): () => void {
+    this.listeners.add(listener);
+    return () => this.listeners.delete(listener);
+  }
+
+  private notify() {
+    this.listeners.forEach((listener) => {
+      try {
+        listener();
+      } catch (e) {
+        console.error('Error in AttributionStore listener:', e);
+      }
+    });
+  }
+
+  // Lectura
+  public getOrganizations(): OrganizationRow[] {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEYS.ORGS);
+      return raw ? JSON.parse(raw) : INITIAL_ORGS;
+    } catch {
+      return INITIAL_ORGS;
+    }
+  }
+
+  public getClients(organizationId?: string): ClientRow[] {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEYS.CLIENTS);
+      const list: ClientRow[] = raw ? JSON.parse(raw) : INITIAL_CLIENTS;
+      return organizationId ? list.filter((c) => c.organization_id === organizationId) : list;
+    } catch {
+      return INITIAL_CLIENTS;
+    }
+  }
+
+  public getClientByToken(secureToken: string): ClientRow | null {
+    const clients = this.getClients();
+    return clients.find((c) => c.secure_token === secureToken && c.is_active) || null;
+  }
+
+  public getClientByApiKey(apiKey: string): ClientRow | null {
+    const clients = this.getClients();
+    return clients.find((c) => c.api_key === apiKey && c.is_active) || null;
+  }
+
+  public getLeads(clientId?: string, organizationId?: string): LeadRow[] {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEYS.LEADS);
+      let list: LeadRow[] = raw ? JSON.parse(raw) : INITIAL_LEADS;
+      if (clientId) {
+        list = list.filter((l) => l.client_id === clientId);
+      }
+      if (organizationId) {
+        list = list.filter((l) => l.organization_id === organizationId);
+      }
+      return list.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    } catch {
+      return INITIAL_LEADS;
+    }
+  }
+
+  // Captura de Leads (Utilizado por el SDK o simulador)
+  public captureLead(payload: CaptureLeadPayload): CaptureLeadResponse {
+    const client = this.getClientByApiKey(payload.api_key);
+    if (!client) {
+      return { success: false, error: 'API Key inválida o cliente inactivo.' };
+    }
+
+    const refCode = payload.ref_code || `#REF-${Math.floor(1000 + Math.random() * 9000)}`;
+    const newLead: LeadRow = {
+      id: `lead-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      client_id: client.id,
+      organization_id: client.organization_id,
+      ref_code: refCode,
+      customer_phone: payload.customer_phone || null,
+      customer_name: payload.customer_name || 'Prospecto WhatsApp',
+      ad_id: payload.ad_id,
+      ad_name: payload.ad_name || 'Anuncio Meta Campaña Activa',
+      utm_source: payload.utm_source || 'meta',
+      utm_medium: payload.utm_medium || 'paid_social',
+      utm_campaign: payload.utm_campaign || 'anuncio_whatsapp',
+      utm_content: payload.utm_content || null,
+      landing_url: payload.landing_url || window.location.href,
+      referrer: payload.referrer || document.referrer,
+      ip_hash: `ip_${Date.now().toString(36)}`,
+      status: 'nuevo',
+      sale_amount: 0.0,
+      currency: 'USD',
+      notes: 'Clic registrado en botón WhatsApp vía Attrad SDK.',
+      attributed_at: new Date().toISOString(),
+      closed_at: null,
+      created_at: new Date().toISOString(),
+    };
+
+    const currentLeads = this.getLeads();
+    const updated = [newLead, ...currentLeads];
+    localStorage.setItem(STORAGE_KEYS.LEADS, JSON.stringify(updated));
+    this.notify();
+
+    return {
+      success: true,
+      lead_id: newLead.id,
+      ref_code: newLead.ref_code,
+      message: 'Lead capturado con atribución First-Touch con éxito.',
+    };
+  }
+
+  // Actualización de estado en 2 clics por el Magic Link
+  public updateLeadStatus(leadId: string, status: LeadStatus, saleAmount: number = 0, notes?: string): boolean {
+    const leads = this.getLeads();
+    const index = leads.findIndex((l) => l.id === leadId);
+    if (index === -1) return false;
+
+    const lead = leads[index];
+    const isClosing = status === 'venta_cerrada' && lead.status !== 'venta_cerrada';
+
+    leads[index] = {
+      ...lead,
+      status,
+      sale_amount: status === 'venta_cerrada' ? Number(saleAmount) : 0,
+      notes: notes !== undefined ? notes : lead.notes,
+      closed_at: isClosing ? new Date().toISOString() : lead.closed_at,
+    };
+
+    localStorage.setItem(STORAGE_KEYS.LEADS, JSON.stringify(leads));
+    this.notify();
+    return true;
+  }
+
+  // Actualización de datos del prospecto desde el Magic Link (nombre / teléfono)
+  public updateLeadInfo(leadId: string, customerName: string, customerPhone: string): boolean {
+    const leads = this.getLeads();
+    const index = leads.findIndex((l) => l.id === leadId);
+    if (index === -1) return false;
+
+    leads[index] = {
+      ...leads[index],
+      customer_name: customerName,
+      customer_phone: customerPhone,
+    };
+
+    localStorage.setItem(STORAGE_KEYS.LEADS, JSON.stringify(leads));
+    this.notify();
+    return true;
+  }
+
+  // Regeneración de Magic Link (Revocación inmediata del token antiguo)
+  public regenerateSecureToken(clientId: string): string | null {
+    const clients = this.getClients();
+    const index = clients.findIndex((c) => c.id === clientId);
+    if (index === -1) return null;
+
+    const newToken = `tok_${clients[index].slug.slice(0, 8)}_${Math.random().toString(36).substring(2, 8)}`;
+    clients[index] = {
+      ...clients[index],
+      secure_token: newToken,
+      updated_at: new Date().toISOString(),
+    };
+
+    localStorage.setItem(STORAGE_KEYS.CLIENTS, JSON.stringify(clients));
+    this.notify();
+    return newToken;
+  }
+
+  // Alta de nuevo cliente para la agencia
+  public createClient(data: {
+    organization_id: string;
+    name: string;
+    industry: string;
+    whatsapp_phone: string;
+  }): ClientRow {
+    const slug = data.name.toLowerCase().trim().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
+    const randomHex = Math.random().toString(36).substring(2, 6);
+    const newClient: ClientRow = {
+      id: `client-${Date.now()}`,
+      organization_id: data.organization_id,
+      name: data.name,
+      slug: `${slug}-${randomHex}`,
+      industry: data.industry,
+      whatsapp_phone: data.whatsapp_phone,
+      api_key: `attrad_live_${slug.replace(/-/g, '_').slice(0, 10)}_${Math.random().toString(36).substring(2, 8)}`,
+      secure_token: `tok_${slug.slice(0, 8)}_${Math.random().toString(36).substring(2, 8)}`,
+      is_active: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+
+    const clients = this.getClients();
+    clients.push(newClient);
+    localStorage.setItem(STORAGE_KEYS.CLIENTS, JSON.stringify(clients));
+    this.notify();
+    return newClient;
+  }
+}
+
+export const attributionStore = new AttributionStore();

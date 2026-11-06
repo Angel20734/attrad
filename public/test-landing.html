@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Landing de Prueba | Clínica Dental Sonrisas</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: #0f172a; color: #f8fafc; min-height: 100vh; padding: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .card { background: #1e293b; border: 1px solid #334155; border-radius: 16px; max-width: 600px; width: 100%; padding: 32px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); }
+    .badge { display: inline-block; padding: 4px 12px; border-radius: 9999px; background: rgba(99, 102, 241, 0.2); color: #818cf8; font-size: 12px; font-weight: 600; text-transform: uppercase; margin-bottom: 16px; }
+    h1 { font-size: 28px; font-weight: 800; margin-bottom: 12px; line-height: 1.2; color: #fff; }
+    p { color: #94a3b8; font-size: 15px; line-height: 1.6; margin-bottom: 24px; }
+    .sim-bar { background: #0f172a; border: 1px dashed #475569; border-radius: 10px; padding: 14px; margin-bottom: 24px; font-size: 13px; }
+    .sim-bar strong { color: #38bdf8; }
+    .sim-buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+    .btn-sim { background: #334155; color: #f8fafc; border: 1px solid #475569; padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; transition: all 0.2s; }
+    .btn-sim:hover { background: #475569; border-color: #64748b; }
+    .wa-button { display: flex; align-items: center; justify-content: center; gap: 10px; background: #22c55e; color: #fff; padding: 16px 24px; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 17px; transition: transform 0.15s, background 0.2s; box-shadow: 0 10px 15px -3px rgba(34, 197, 94, 0.4); }
+    .wa-button:hover { background: #16a34a; transform: translateY(-2px); }
+    .diagnostics { margin-top: 24px; padding-top: 20px; border-top: 1px solid #334155; font-size: 13px; color: #94a3b8; }
+    .diagnostics code { background: #0f172a; padding: 2px 6px; border-radius: 4px; color: #a5b4fc; font-family: monospace; }
+    .status-pill { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 12px; color: #34d399; font-weight: 600; }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #34d399; animation: pulse 2s infinite; }
+    @keyframes pulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
+  </style>
+
+  <!-- Attrad SDK instalado en la landing page del cliente -->
+  <script async defer src="/sdk/attrad.js" data-api-key="attrad_live_sonrisas_pk92"></script>
+</head>
+<body>
+  <div class="card">
+    <span class="badge">Landing de Demostración</span>
+    <h1>Diseño de Sonrisa & Ortodoncia Invisible</h1>
+    <p>Simulador para comprobar la captura First-Touch y la inyección automática del código <code>[Ref: #XXX]</code> al tocar el botón de WhatsApp.</p>
+
+    <!-- Simulador de Campañas Meta -->
+    <div class="sim-bar">
+      <div><strong>Simular Clic desde Anuncio de Meta Ads:</strong></div>
+      <div class="sim-buttons">
+        <button class="btn-sim" onclick="setParams('ad_meta_ortodoncia_01', 'campana_ortodoncia_q4')">🎯 Anuncio Ortodoncia Reel #1</button>
+        <button class="btn-sim" onclick="setParams('ad_meta_blanqueamiento_02', 'promo_blanqueamiento_express')">💎 Anuncio Blanqueamiento 2x1</button>
+        <button class="btn-sim" onclick="clearStorage()">🔄 Limpiar Atribución</button>
+      </div>
+    </div>
+
+    <!-- Botón de WhatsApp que el usuario presiona -->
+    <a id="btnWhatsapp" href="https://wa.me/525591827364?text=Hola,%20quiero%20información%20de%20la%20promoción" class="wa-button" target="_blank">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-5.46-4.45-9.92-9.91-9.92zM12.04 20.15c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31c-.82-1.31-1.26-2.83-1.26-4.38 0-4.54 3.7-8.24 8.24-8.24 4.54 0 8.24 3.7 8.24 8.24 0 4.54-3.7 8.24-8.24 8.24zm4.52-6.17c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.39-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.15.17-.25.25-.42.08-.17.04-.31-.02-.43s-.56-1.34-.76-1.84c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.87.85-.87 2.07 0 1.22.89 2.4 1.01 2.57.12.17 1.75 2.67 4.24 3.75.59.26 1.05.41 1.41.53.6.19 1.14.16 1.57.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.18-.47-.3z"/>
+      </svg>
+      Enviar mensaje por WhatsApp
+    </a>
+
+    <!-- Diagnóstico en Vivo -->
+    <div class="diagnostics">
+      <div id="diagInfo">Cargando diagnóstico del SDK...</div>
+      <div class="status-pill">
+        <span class="status-dot"></span>
+        <span>SDK Attrad activo en segundo plano</span>
+      </div>
+      <div style="margin-top: 14px;">
+        <a href="/" style="color: #818cf8; text-decoration: underline; font-weight: 600;">Ir al Panel de la Agencia / Magic Link &rarr;</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function setParams(adId, campaign) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('ad_id', adId);
+      url.searchParams.set('utm_source', 'meta');
+      url.searchParams.set('utm_campaign', campaign);
+      window.location.href = url.toString();
+    }
+
+    function clearStorage() {
+      localStorage.removeItem('_attrad_first_touch');
+      window.location.href = window.location.pathname;
+    }
+
+    function updateDiag() {
+      const raw = localStorage.getItem('_attrad_first_touch');
+      const infoEl = document.getElementById('diagInfo');
+      if (raw) {
+        const data = JSON.parse(raw);
+        infoEl.innerHTML = `
+          <strong>Atribución First-Touch Activa:</strong><br>
+          • Ad ID: <code>${data.ad_id}</code><br>
+          • Ref Code para WhatsApp: <code>${data.ref_code}</code><br>
+          • Campaña: <code>${data.utm_campaign}</code>
+        `;
+      } else {
+        infoEl.innerHTML = 'Sin atribución previa. Al hacer clic se registrará el origen actual.';
+      }
+    }
+
+    // Escuchar el evento que dispara el SDK
+    window.addEventListener('attrad:capture', (e) => {
+      console.log('[Attrad Event]', e.detail);
+      // Guardar también en el almacén de demo
+      try {
+        const rawLeads = localStorage.getItem('attrad_leads_v1');
+        const list = rawLeads ? JSON.parse(rawLeads) : [];
+        const newLead = {
+          id: 'lead-' + Date.now(),
+          client_id: 'client-sonrisas',
+          organization_id: 'org-nexus',
+          ref_code: e.detail.ref_code,
+          customer_phone: null,
+          customer_name: 'Prospecto de Landing Demo',
+          ad_id: e.detail.ad_id,
+          ad_name: e.detail.ad_id.indexOf('ortodoncia') > -1 ? 'Ortodoncia Invisible - Video Reel #1' : 'Blanqueamiento Láser 2x1',
+          utm_source: e.detail.utm_source,
+          utm_medium: e.detail.utm_medium,
+          utm_campaign: e.detail.utm_campaign,
+          utm_content: e.detail.utm_content,
+          landing_url: window.location.href,
+          referrer: document.referrer,
+          ip_hash: 'hash_' + Math.random().toString(36).substring(2, 7),
+          status: 'nuevo',
+          sale_amount: 0.0,
+          currency: 'USD',
+          notes: 'Capturado en vivo desde test-landing.html',
+          attributed_at: new Date().toISOString(),
+          closed_at: null,
+          created_at: new Date().toISOString()
+        };
+        list.unshift(newLead);
+        localStorage.setItem('attrad_leads_v1', JSON.stringify(list));
+      } catch (err) {}
+      alert(`✅ ¡Lead capturado con éxito!\nCódigo de Referencia: ${e.detail.ref_code}\nAnuncio: ${e.detail.ad_id}\n\nYa puedes abrir el Magic Link para marcar la venta.`);
+    });
+
+    setInterval(updateDiag, 1000);
+    updateDiag();
+  </script>
+</body>
+</html>
