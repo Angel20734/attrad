@@ -9,7 +9,7 @@ import {
   INITIAL_LEADS,
 } from '../data/mockData';
 
-export type ActiveTab = 'clients' | 'ads' | 'pipeline' | 'admin';
+export type ActiveTab = 'roi' | 'clients' | 'ads' | 'pipeline' | 'admin';
 
 interface AttradContextType {
   // Autenticación

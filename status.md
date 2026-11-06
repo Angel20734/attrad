@@ -35,17 +35,30 @@ Plataforma B2B Multi-tenant de Inteligencia de Atribución de Anuncios ("First-T
 - **Verificación**: `tsc --noEmit` ✅ 0 errores | `npm run build` ✅ código 0.
 
 ## Último Implementado (Sesión Actual)
-- **Eliminación Total de "CRM"**: Retirada de toda mención de la palabra "CRM" y sus derivadas en branding, interfaz visual, títulos HTML, metadatos, configuraciones (`package.json`, `package-lock.json`, `.env.example`), migraciones SQL y scripts SDK (`attrad.js`, `attrad.min.js`).
-- **Actualización de Identidad y Credenciales**:
-  - Marca formalizada a **ATTRAD** (First-Touch Ad Attribution).
-  - Correo de Super Admin actualizado a `admin@attrad.com` (en UI, demo fill y credenciales del contexto).
-  - Dominio y endpoints limpiados a `attrad.com` y `app.vanguardlab.com`.
-- **Verificación Técnica y Despliegue de Código**:
-  - Búsqueda recursiva: 0 coincidencias de "crm".
-  - Tipado TypeScript (`tsc --noEmit`): 0 errores.
-  - Compilación de producción (`vite build`): Exitosa (1600 módulos transformados, 0 errores).
-  - Repositorio GitHub creado y sincronizado: [https://github.com/Angel20734/attrad](https://github.com/Angel20734/attrad) (Rama `main`, commit inicial limpio y libre de secretos).
-  - Servidor de desarrollo levantado y activo en `http://localhost:5173/`.
+- **Perfeccionamiento Completo del Frontend para Lanzamiento Público**:
+  - **Portal Magic Link (`MagicLinkPortal.tsx`)**:
+    - Pestañas de filtrado por estado con contadores en tiempo real (Todos, 🔵 Nuevos, 🟡 Citas, 🟢 Ventas, ⚪ Descartados).
+    - Filtro por rango temporal (Todo el historial, Hoy, Últimos 7 días, Últimos 30 días) y buscador en vivo con botón de limpieza.
+    - Modal de registro manual (`+ Nuevo Registro`) para que la recepcionista registre pacientes/compradores en mostrador o WhatsApp y atribuya anuncios o tráfico orgánico.
+    - Modal Dossier de Atribución First-Touch con auditoría de parámetros UTMs, campaña, red y enlace directo a WhatsApp.
+    - Modal de cierre de venta en 2 clics con atajos rápidos de montos ($50, $150, $300, $500, $1200, $2500) y registro de notas del tratamiento.
+    - Exportación instantánea a CSV de todos los prospectos y ventas atribuidas.
+    - Alternador de vista responsiva (Tabla detallada y Tarjetas móviles táctiles).
+    - Copia de enlace directo del portal para recepción.
+  - **Barra de Navegación Principal (`Navbar.tsx`)**:
+    - Rediseño estético Dark Luxury Glassmorphism.
+    - Integración de pestaña central **Atribución & ROI** (`roi`) conectada con `AgencyROIHub`.
+    - Selector activo de espacio de cliente con logos y categorías.
+    - Eliminación de cajas toscas de depuración; reemplazado por Menú de Usuario / Perfil profesional con avatar, cambio de roles en 1 clic, restauración de datos demo y cierre de sesión.
+    - Cajón de navegación móvil (Hamburger Drawer) para perfecta compatibilidad con teléfonos y tablets.
+  - **Pantalla de Inicio / Acceso Público (`LoginView.tsx`)**:
+    - Acceso instantáneo en 1 clic para visitantes públicos (Nexus Media, Super Admin, Agencia Suspendida) sin necesidad de tipear.
+    - Enlaces directos a pruebas externas (Magic Link de cliente y simulación de anuncios).
+  - **Infraestructura de Despliegue en Vercel (`vercel.json`)**:
+    - Reglas de reescritura SPA para rutas limpias, preservando `/test-landing.html` y el SDK `/sdk/attrad.min.js`.
+- **Verificación Técnica**:
+  - `tsc --noEmit`: 0 errores.
+  - `npm run build`: 1601 módulos transformados, 0 errores, compilación lista en `dist/`.
 
 ## Estado de Credenciales de Demo
 | Rol | Email | Contraseña |

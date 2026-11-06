@@ -394,6 +394,65 @@ class AttributionStore {
     this.notify();
     return newClient;
   }
+
+  // Creación manual de lead desde el Magic Link (Recepción) o Panel de Agencia
+  public createManualLead(data: {
+    client_id: string;
+    customer_name: string;
+    customer_phone?: string;
+    ref_code?: string;
+    ad_id?: string;
+    ad_name?: string;
+    utm_source?: string;
+    status: LeadStatus;
+    sale_amount?: number;
+    notes?: string;
+  }): LeadRow {
+    const client = this.getClients().find((c) => c.id === data.client_id);
+    const refCode = data.ref_code?.trim() || `#REF-${Math.floor(1000 + Math.random() * 9000)}`;
+    const isClosing = data.status === 'venta_cerrada';
+
+    const newLead: LeadRow = {
+      id: `lead-manual-${Date.now()}`,
+      client_id: data.client_id,
+      organization_id: client ? client.organization_id : 'org-nexus',
+      ref_code: refCode,
+      customer_phone: data.customer_phone?.trim() || null,
+      customer_name: data.customer_name.trim() || 'Prospecto WhatsApp',
+      ad_id: data.ad_id || 'manual_direct',
+      ad_name: data.ad_name || 'Registro Directo en Recepción',
+      utm_source: data.utm_source || 'directo',
+      utm_medium: 'recepcion',
+      utm_campaign: 'registro_manual',
+      utm_content: null,
+      landing_url: window.location.href,
+      referrer: 'magic_link_portal',
+      ip_hash: 'manual_entry',
+      status: data.status,
+      sale_amount: isClosing ? Number(data.sale_amount || 0) : 0,
+      currency: 'USD',
+      notes: data.notes?.trim() || 'Registrado manualmente en el Magic Link.',
+      attributed_at: new Date().toISOString(),
+      closed_at: isClosing ? new Date().toISOString() : null,
+      created_at: new Date().toISOString(),
+    };
+
+    const currentLeads = this.getLeads();
+    const updated = [newLead, ...currentLeads];
+    localStorage.setItem(STORAGE_KEYS.LEADS, JSON.stringify(updated));
+    this.notify();
+    return newLead;
+  }
+
+  // Eliminación o descarte permanente de lead
+  public deleteLead(leadId: string): boolean {
+    const leads = this.getLeads();
+    const filtered = leads.filter((l) => l.id !== leadId);
+    if (filtered.length === leads.length) return false;
+    localStorage.setItem(STORAGE_KEYS.LEADS, JSON.stringify(filtered));
+    this.notify();
+    return true;
+  }
 }
 
 export const attributionStore = new AttributionStore();

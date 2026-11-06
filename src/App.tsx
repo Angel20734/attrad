@@ -8,6 +8,7 @@ import { ClientSpacesHub } from './components/clients/ClientSpacesHub';
 import { MagicLinkPortal } from './components/magic-link/MagicLinkPortal';
 import { AdHub } from './components/ad-hub/AdHub';
 import { PipelineKanban } from './components/pipeline/PipelineKanban';
+import { AgencyROIHub } from './components/agency/AgencyROIHub';
 
 const AppContent: React.FC = () => {
   const { currentUser, userRole, activeTab, activeTenant } = useAttrad();
@@ -58,6 +59,12 @@ const AppContent: React.FC = () => {
       <Navbar onOpenMagicLink={(tok: string) => setMagicLinkToken(tok)} />
       <main className="main-content">
         {userRole === 'super_admin' && activeTab === 'admin' && <SuperAdminPanel />}
+        {userRole === 'agency_user' && activeTab === 'roi' && (
+          <AgencyROIHub
+            currentAgencyId={currentUser.agencyId || 'org-nexus'}
+            onOpenMagicLink={(tok: string) => setMagicLinkToken(tok)}
+          />
+        )}
         {userRole === 'agency_user' && activeTab === 'clients' && (
           <ClientSpacesHub onOpenMagicLink={(tok: string) => setMagicLinkToken(tok)} />
         )}
