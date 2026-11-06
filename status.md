@@ -40,10 +40,11 @@ Plataforma B2B Multi-tenant de Inteligencia de Atribución de Anuncios ("First-T
   - Marca formalizada a **ATTRAD** (First-Touch Ad Attribution).
   - Correo de Super Admin actualizado a `admin@attrad.com` (en UI, demo fill y credenciales del contexto).
   - Dominio y endpoints limpiados a `attrad.com` y `app.vanguardlab.com`.
-- **Verificación Técnica**:
+- **Verificación Técnica y Despliegue de Código**:
   - Búsqueda recursiva: 0 coincidencias de "crm".
   - Tipado TypeScript (`tsc --noEmit`): 0 errores.
   - Compilación de producción (`vite build`): Exitosa (1600 módulos transformados, 0 errores).
+  - Repositorio GitHub creado y sincronizado: [https://github.com/Angel20734/attrad](https://github.com/Angel20734/attrad) (Rama `main`, commit inicial limpio y libre de secretos).
   - Servidor de desarrollo levantado y activo en `http://localhost:5173/`.
 
 ## Estado de Credenciales de Demo
