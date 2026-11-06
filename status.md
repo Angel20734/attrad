@@ -77,7 +77,14 @@ Plataforma B2B Multi-tenant de Inteligencia de Atribución de Anuncios ("First-T
 - [x] **Fase 4**: Interfaces de Usuario (`MagicLinkPortal.tsx` con acción de 2 clics para confirmar ventas y $ + `AgencyROIHub.tsx` con cruce ROI de anuncios vs ventas y alta de clientes).
 - [x] **Validación Técnica**: `tsc --noEmit` y `npm run build` ✅ **0 errores** (1600 módulos transformados, código de salida 0).
 
+## Siguientes Pasos Inmediatos
+1. **Despliegue en Vercel**: Importar el repositorio [**github.com/Angel20734/attrad**](https://github.com/Angel20734/attrad) con 1 clic (detección automática de Vite + reglas en `vercel.json`).
+2. **Conexión de Supabase en Producción**: Crear el proyecto en Supabase, aplicar la migración SQL `001_initial_schema.sql` y desplegar la Edge Function `capture-lead` para pasar de persistencia híbrida a backend distribuido.
+3. **Integración con Meta / Google Ads APIs**: Conectar webhooks oficiales de Conversions API (CAPI) para retroalimentar el algoritmo de anuncios con las ventas cerradas.
+
 ## Enlaces Rápidos de Prueba en Servidor Local (http://localhost:5173/)
-1. **Magic Link de Recepción (Clínica Sonrisas)**: `http://localhost:5173/?token=tok_sonrisas_8f14b2`
-2. **Landing de Prueba de Captura**: `http://localhost:5173/test-landing.html`
-3. **Panel de Agencia**: `http://localhost:5173/` (Login: `nexus@agencymedia.com` / `NexusMedia2026*`)
+1. **Dashboard Principal (Sidebar a la Izquierda)**: `http://localhost:5173/` (Login: `nexus@agencymedia.com` / `NexusMedia2026*`)
+2. **Magic Link de Recepción (Clínica Sonrisas)**: `http://localhost:5173/?token=tok_sonrisas_8f14b2`
+3. **Magic Link de Recepción (Inmobiliaria Prime)**: `http://localhost:5173/?token=tok_valle_3c99a1`
+4. **Landing de Prueba de Captura**: `http://localhost:5173/test-landing.html`
+5. **Repositorio GitHub**: `https://github.com/Angel20734/attrad`
