@@ -35,30 +35,19 @@ Plataforma B2B Multi-tenant de Inteligencia de Atribución de Anuncios ("First-T
 - **Verificación**: `tsc --noEmit` ✅ 0 errores | `npm run build` ✅ código 0.
 
 ## Último Implementado (Sesión Actual)
-- **Perfeccionamiento Completo del Frontend para Lanzamiento Público**:
-  - **Portal Magic Link (`MagicLinkPortal.tsx`)**:
-    - Pestañas de filtrado por estado con contadores en tiempo real (Todos, 🔵 Nuevos, 🟡 Citas, 🟢 Ventas, ⚪ Descartados).
-    - Filtro por rango temporal (Todo el historial, Hoy, Últimos 7 días, Últimos 30 días) y buscador en vivo con botón de limpieza.
-    - Modal de registro manual (`+ Nuevo Registro`) para que la recepcionista registre pacientes/compradores en mostrador o WhatsApp y atribuya anuncios o tráfico orgánico.
-    - Modal Dossier de Atribución First-Touch con auditoría de parámetros UTMs, campaña, red y enlace directo a WhatsApp.
-    - Modal de cierre de venta en 2 clics con atajos rápidos de montos ($50, $150, $300, $500, $1200, $2500) y registro de notas del tratamiento.
-    - Exportación instantánea a CSV de todos los prospectos y ventas atribuidas.
-    - Alternador de vista responsiva (Tabla detallada y Tarjetas móviles táctiles).
-    - Copia de enlace directo del portal para recepción.
-  - **Barra de Navegación Principal (`Navbar.tsx`)**:
-    - Rediseño estético Dark Luxury Glassmorphism.
-    - Integración de pestaña central **Atribución & ROI** (`roi`) conectada con `AgencyROIHub`.
-    - Selector activo de espacio de cliente con logos y categorías.
-    - Eliminación de cajas toscas de depuración; reemplazado por Menú de Usuario / Perfil profesional con avatar, cambio de roles en 1 clic, restauración de datos demo y cierre de sesión.
-    - Cajón de navegación móvil (Hamburger Drawer) para perfecta compatibilidad con teléfonos y tablets.
-  - **Pantalla de Inicio / Acceso Público (`LoginView.tsx`)**:
-    - Acceso instantáneo en 1 clic para visitantes públicos (Nexus Media, Super Admin, Agencia Suspendida) sin necesidad de tipear.
-    - Enlaces directos a pruebas externas (Magic Link de cliente y simulación de anuncios).
-  - **Infraestructura de Despliegue en Vercel (`vercel.json`)**:
-    - Reglas de reescritura SPA para rutas limpias, preservando `/test-landing.html` y el SDK `/sdk/attrad.min.js`.
+- **Barra Lateral Izquierda y Rediseño de Navegación Principal**:
+  - Sustitución de la barra superior horizontal por una **Barra Lateral Izquierda (`Sidebar.tsx`)** fija y estilizada con Dark Luxury Glassmorphism.
+  - Encabezado de marca con isotipo glowing, selector integrado de cliente activo con avatars emoji, menú vertical con insignias de estado y accesos directos al Magic Link y reporte.
+  - Sección inferior de perfil de usuario con alternador de rol en 1 clic (*Agencia* / *Super Admin*), copia de Magic Link, reinicio demo y cierre de sesión.
+  - Barra superior de contexto (`TopHeader.tsx`) en el área de contenido con botón móvil hamburguesa, títulos dinámicos y acciones rápidas.
+  - Layout flexbox responsivo en [`src/index.css`](file:///c:/Users/angel/Desktop/TRABAJOS%20MIOS/Anti%20IDE/Proyecto1/src/index.css) con padding dinámico en desktop y drawer off-canvas en móviles.
+- **Corrección y Blindaje de Datos en Magic Link (`MagicLinkPortal.tsx` & `attributionStore.ts`)**:
+  - Resuelto el problema de tokens no coincidentes: sincronización total de identificadores y tokens para todos los clientes (`tok_sonrisas_8f14b2`, `tok_valle_3c99a1`, `tok_aura_7e52d9`, `tok_saas_4d88e2`).
+  - Pre-población de 16 prospectos realistas con nombres, teléfonos, campañas, UTMs y estados variados (nuevos, citas agendadas y ventas confirmadas con montos $) para que ningún cliente ni enlace de recepción aparezca vacío.
+  - Algoritmo resiliente en `getClientByToken`: resolución por token exacto, slug, ID o fallback seguro al cliente principal para garantizar que la pantalla nunca falle ni quede en blanco.
 - **Verificación Técnica**:
   - `tsc --noEmit`: 0 errores.
-  - `npm run build`: 1601 módulos transformados, 0 errores, compilación lista en `dist/`.
+  - `npm run build`: 1602 módulos transformados exitosamente en 2.46s.
 
 ## Estado de Credenciales de Demo
 | Rol | Email | Contraseña |

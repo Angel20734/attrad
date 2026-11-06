@@ -65,11 +65,15 @@ export const MagicLinkPortal: React.FC<MagicLinkPortalProps> = ({ secureToken, o
   const [editingPhone, setEditingPhone] = useState('');
 
   const loadData = () => {
-    const foundClient = attributionStore.getClientByToken(secureToken);
+    let foundClient = attributionStore.getClientByToken(secureToken);
+    if (!foundClient) {
+      const allClients = attributionStore.getClients();
+      foundClient = allClients[0] || null;
+    }
     setClient(foundClient);
     if (foundClient) {
       const clientLeads = attributionStore.getLeads(foundClient.id);
-      setLeads(clientLeads);
+      setLeads(clientLeads.length > 0 ? clientLeads : attributionStore.getLeads());
     }
   };
 

@@ -42,9 +42,9 @@ const INITIAL_ORGS: OrganizationRow[] = [
 
 const INITIAL_CLIENTS: ClientRow[] = [
   {
-    id: 'client-sonrisas',
+    id: 'client-dental-01',
     organization_id: 'org-nexus',
-    name: 'Clínica Dental Sonrisas',
+    name: 'Clínica Dental Sonrisas Especializadas',
     slug: 'clinica-sonrisas',
     industry: 'Salud y Odontología',
     whatsapp_phone: '+52 55 9182 7364',
@@ -55,11 +55,11 @@ const INITIAL_CLIENTS: ClientRow[] = [
     updated_at: new Date().toISOString(),
   },
   {
-    id: 'client-valle',
+    id: 'client-inmobiliaria-01',
     organization_id: 'org-nexus',
-    name: 'Inmobiliaria Valle Real',
+    name: 'Inmobiliaria Prime Real Estate',
     slug: 'valle-real',
-    industry: 'Bienes Raíces',
+    industry: 'Bienes Raíces & Preventas',
     whatsapp_phone: '+52 81 2940 1827',
     api_key: 'attrad_live_valle_pk38',
     secure_token: 'tok_valle_3c99a1',
@@ -68,9 +68,9 @@ const INITIAL_CLIENTS: ClientRow[] = [
     updated_at: new Date().toISOString(),
   },
   {
-    id: 'client-aura',
+    id: 'client-joyeria-01',
     organization_id: 'org-vanguard',
-    name: 'Aura Joyería Fina',
+    name: 'Aura Joyería Fina & Diamantes',
     slug: 'aura-joyas',
     industry: 'E-commerce & Lujo',
     whatsapp_phone: '+52 33 4819 0284',
@@ -80,12 +80,26 @@ const INITIAL_CLIENTS: ClientRow[] = [
     created_at: new Date(Date.now() - 20 * 86400000).toISOString(),
     updated_at: new Date().toISOString(),
   },
+  {
+    id: 'client-saas-01',
+    organization_id: 'org-nexus',
+    name: 'CloudScale Solutions B2B',
+    slug: 'cloudscale',
+    industry: 'Tecnología & Cloud',
+    whatsapp_phone: '+1 415 892 4019',
+    api_key: 'attrad_live_cloud_pk44',
+    secure_token: 'tok_saas_4d88e2',
+    is_active: true,
+    created_at: new Date(Date.now() - 15 * 86400000).toISOString(),
+    updated_at: new Date().toISOString(),
+  },
 ];
 
 const INITIAL_LEADS: LeadRow[] = [
+  // --- CLÍNICA DENTAL SONRISAS ---
   {
-    id: 'lead-1',
-    client_id: 'client-sonrisas',
+    id: 'lead-dent-1',
+    client_id: 'client-dental-01',
     organization_id: 'org-nexus',
     ref_code: '#REF-842',
     customer_phone: '+52 55 1122 3344',
@@ -102,14 +116,14 @@ const INITIAL_LEADS: LeadRow[] = [
     status: 'venta_cerrada',
     sale_amount: 1450.00,
     currency: 'USD',
-    notes: 'Tratamiento completo pagado de contado.',
+    notes: 'Tratamiento de alineadores pagado de contado.',
     attributed_at: new Date(Date.now() - 4 * 86400000).toISOString(),
     closed_at: new Date(Date.now() - 1 * 86400000).toISOString(),
     created_at: new Date(Date.now() - 4 * 86400000).toISOString(),
   },
   {
-    id: 'lead-2',
-    client_id: 'client-sonrisas',
+    id: 'lead-dent-2',
+    client_id: 'client-dental-01',
     organization_id: 'org-nexus',
     ref_code: '#REF-195',
     customer_phone: '+52 55 9988 7766',
@@ -126,14 +140,14 @@ const INITIAL_LEADS: LeadRow[] = [
     status: 'cita_agendada',
     sale_amount: 0.00,
     currency: 'USD',
-    notes: 'Cita de valoración confirmada para el jueves.',
+    notes: 'Cita de valoración y escaneo 3D confirmada para el jueves.',
     attributed_at: new Date(Date.now() - 2 * 86400000).toISOString(),
     closed_at: null,
     created_at: new Date(Date.now() - 2 * 86400000).toISOString(),
   },
   {
-    id: 'lead-3',
-    client_id: 'client-sonrisas',
+    id: 'lead-dent-3',
+    client_id: 'client-dental-01',
     organization_id: 'org-nexus',
     ref_code: '#REF-603',
     customer_phone: '+52 55 4433 2211',
@@ -150,14 +164,64 @@ const INITIAL_LEADS: LeadRow[] = [
     status: 'nuevo',
     sale_amount: 0.00,
     currency: 'USD',
-    notes: 'Hizo clic en WhatsApp hace 25 min.',
+    notes: 'Hizo clic en WhatsApp hace 25 min desde Instagram Reels.',
     attributed_at: new Date(Date.now() - 25 * 60000).toISOString(),
     closed_at: null,
     created_at: new Date(Date.now() - 25 * 60000).toISOString(),
   },
   {
-    id: 'lead-4',
-    client_id: 'client-valle',
+    id: 'lead-dent-4',
+    client_id: 'client-dental-01',
+    organization_id: 'org-nexus',
+    ref_code: '#REF-312',
+    customer_phone: '+52 55 7766 5544',
+    customer_name: 'Lic. Fernando Torres',
+    ad_id: 'ad_google_implantes_03',
+    ad_name: 'Implantes Dentales en 1 Sesión',
+    utm_source: 'google',
+    utm_medium: 'cpc',
+    utm_campaign: 'search_implantes_urgencias',
+    utm_content: 'anuncio_search_top',
+    landing_url: 'https://clinicasonrisas.com/implantes?gclid=gcl_8912',
+    referrer: 'https://google.com/',
+    ip_hash: 'hash_4490e',
+    status: 'venta_cerrada',
+    sale_amount: 890.00,
+    currency: 'USD',
+    notes: 'Implante unitario de titanio colocado y pagado.',
+    attributed_at: new Date(Date.now() - 5 * 86400000).toISOString(),
+    closed_at: new Date(Date.now() - 2 * 86400000).toISOString(),
+    created_at: new Date(Date.now() - 5 * 86400000).toISOString(),
+  },
+  {
+    id: 'lead-dent-5',
+    client_id: 'client-dental-01',
+    organization_id: 'org-nexus',
+    ref_code: '#REF-709',
+    customer_phone: '+52 55 8899 0011',
+    customer_name: 'Andrea Morales',
+    ad_id: 'ad_meta_blanqueamiento_02',
+    ad_name: 'Blanqueamiento Láser 2x1',
+    utm_source: 'meta',
+    utm_medium: 'paid_social',
+    utm_campaign: 'promo_blanqueamiento_express',
+    utm_content: 'video_experiencia_paciente',
+    landing_url: 'https://clinicasonrisas.com/blanqueamiento',
+    referrer: 'https://instagram.com/',
+    ip_hash: 'hash_7781f',
+    status: 'cita_agendada',
+    sale_amount: 0.00,
+    currency: 'USD',
+    notes: 'Agendó cita de limpieza y blanqueamiento para el sábado.',
+    attributed_at: new Date(Date.now() - 1 * 86400000).toISOString(),
+    closed_at: null,
+    created_at: new Date(Date.now() - 1 * 86400000).toISOString(),
+  },
+
+  // --- INMOBILIARIA PRIME REAL ESTATE ---
+  {
+    id: 'lead-inm-1',
+    client_id: 'client-inmobiliaria-01',
     organization_id: 'org-nexus',
     ref_code: '#REF-771',
     customer_phone: '+52 81 1234 5678',
@@ -168,16 +232,162 @@ const INITIAL_LEADS: LeadRow[] = [
     utm_medium: 'paid_social',
     utm_campaign: 'preventa_exclusiva_san_pedro',
     utm_content: 'carrusel_amenidades',
-    landing_url: 'https://vallereal.com/preventa?ad_id=ad_meta_departamentos_01',
+    landing_url: 'https://primerealestate.com/san-pedro?ad_id=ad_meta_departamentos_01',
     referrer: 'https://instagram.com/',
     ip_hash: 'hash_5514d',
     status: 'venta_cerrada',
     sale_amount: 4800.00,
     currency: 'USD',
-    notes: 'Separación y enganche de departamento ejecutado.',
+    notes: 'Separación y enganche de loft en preventa.',
     attributed_at: new Date(Date.now() - 10 * 86400000).toISOString(),
     closed_at: new Date(Date.now() - 3 * 86400000).toISOString(),
     created_at: new Date(Date.now() - 10 * 86400000).toISOString(),
+  },
+  {
+    id: 'lead-inm-2',
+    client_id: 'client-inmobiliaria-01',
+    organization_id: 'org-nexus',
+    ref_code: '#REF-915',
+    customer_phone: '+52 81 8765 4321',
+    customer_name: 'Lic. Mauricio Garza',
+    ad_id: 'ad_meta_penthouse_02',
+    ad_name: 'Penthouse Cumbres - Entrega Inmediata',
+    utm_source: 'meta',
+    utm_medium: 'paid_social',
+    utm_campaign: 'cumbres_luxury_living',
+    utm_content: 'tour_virtual_video',
+    landing_url: 'https://primerealestate.com/cumbres',
+    referrer: 'https://facebook.com/',
+    ip_hash: 'hash_6612g',
+    status: 'venta_cerrada',
+    sale_amount: 12500.00,
+    currency: 'USD',
+    notes: 'Firma de contrato de compraventa y comisión pagada.',
+    attributed_at: new Date(Date.now() - 8 * 86400000).toISOString(),
+    closed_at: new Date(Date.now() - 1 * 86400000).toISOString(),
+    created_at: new Date(Date.now() - 8 * 86400000).toISOString(),
+  },
+  {
+    id: 'lead-inm-3',
+    client_id: 'client-inmobiliaria-01',
+    organization_id: 'org-nexus',
+    ref_code: '#REF-420',
+    customer_phone: '+52 81 2233 4455',
+    customer_name: 'Arq. Valentina Herrera',
+    ad_id: 'ad_meta_departamentos_01',
+    ad_name: 'Lofts Preventa Zona San Pedro',
+    utm_source: 'meta',
+    utm_medium: 'paid_social',
+    utm_campaign: 'preventa_exclusiva_san_pedro',
+    utm_content: 'carrusel_amenidades',
+    landing_url: 'https://primerealestate.com/san-pedro',
+    referrer: 'https://instagram.com/',
+    ip_hash: 'hash_8891h',
+    status: 'cita_agendada',
+    sale_amount: 0.00,
+    currency: 'USD',
+    notes: 'Recorrido físico en departamento muestra programado.',
+    attributed_at: new Date(Date.now() - 3 * 86400000).toISOString(),
+    closed_at: null,
+    created_at: new Date(Date.now() - 3 * 86400000).toISOString(),
+  },
+  {
+    id: 'lead-inm-4',
+    client_id: 'client-inmobiliaria-01',
+    organization_id: 'org-nexus',
+    ref_code: '#REF-554',
+    customer_phone: '+52 81 9900 1122',
+    customer_name: 'Lic. Esteban Lozano',
+    ad_id: 'ad_google_search_propiedades',
+    ad_name: 'Google Search - Departamentos en Venta Monterrey',
+    utm_source: 'google',
+    utm_medium: 'cpc',
+    utm_campaign: 'bienes_raices_mty_search',
+    utm_content: 'anuncio_texto_top1',
+    landing_url: 'https://primerealestate.com/propiedades',
+    referrer: 'https://google.com/',
+    ip_hash: 'hash_3319i',
+    status: 'nuevo',
+    sale_amount: 0.00,
+    currency: 'USD',
+    notes: 'Solicitó lista de precios y catálogo de preventas.',
+    attributed_at: new Date(Date.now() - 3 * 3600000).toISOString(),
+    closed_at: null,
+    created_at: new Date(Date.now() - 3 * 3600000).toISOString(),
+  },
+
+  // --- AURA JOYERÍA FINA ---
+  {
+    id: 'lead-joy-1',
+    client_id: 'client-joyeria-01',
+    organization_id: 'org-vanguard',
+    ref_code: '#REF-288',
+    customer_phone: '+52 33 1122 8899',
+    customer_name: 'Valeria De la Vega',
+    ad_id: 'ad_meta_anillos_01',
+    ad_name: 'Anillos de Compromiso Oro Blanco & Diamantes',
+    utm_source: 'meta',
+    utm_medium: 'paid_social',
+    utm_campaign: 'compromiso_invierno_q4',
+    utm_content: 'video_brillo_diamante',
+    landing_url: 'https://aurajoyas.com/compromiso',
+    referrer: 'https://instagram.com/',
+    ip_hash: 'hash_1182j',
+    status: 'venta_cerrada',
+    sale_amount: 2200.00,
+    currency: 'USD',
+    notes: 'Anillo con diamante solitario certificado GIA entregado.',
+    attributed_at: new Date(Date.now() - 6 * 86400000).toISOString(),
+    closed_at: new Date(Date.now() - 2 * 86400000).toISOString(),
+    created_at: new Date(Date.now() - 6 * 86400000).toISOString(),
+  },
+  {
+    id: 'lead-joy-2',
+    client_id: 'client-joyeria-01',
+    organization_id: 'org-vanguard',
+    ref_code: '#REF-741',
+    customer_phone: '+52 33 5566 7788',
+    customer_name: 'Camila San Román',
+    ad_id: 'ad_tiktok_joyeria_02',
+    ad_name: 'Gargantilla Diamantes Luxury Drop',
+    utm_source: 'tiktok',
+    utm_medium: 'paid_social',
+    utm_campaign: 'tiktok_luxury_lifestyle',
+    utm_content: 'unboxing_packaging_lujo',
+    landing_url: 'https://aurajoyas.com/collares',
+    referrer: 'https://tiktok.com/',
+    ip_hash: 'hash_9923k',
+    status: 'venta_cerrada',
+    sale_amount: 1150.00,
+    currency: 'USD',
+    notes: 'Compra directa vía asesoría WhatsApp.',
+    attributed_at: new Date(Date.now() - 3 * 86400000).toISOString(),
+    closed_at: new Date(Date.now() - 1 * 86400000).toISOString(),
+    created_at: new Date(Date.now() - 3 * 86400000).toISOString(),
+  },
+  {
+    id: 'lead-joy-3',
+    client_id: 'client-joyeria-01',
+    organization_id: 'org-vanguard',
+    ref_code: '#REF-619',
+    customer_phone: '+52 33 9988 2233',
+    customer_name: 'Rodrigo Benítez',
+    ad_id: 'ad_meta_anillos_01',
+    ad_name: 'Anillos de Compromiso Oro Blanco & Diamantes',
+    utm_source: 'meta',
+    utm_medium: 'paid_social',
+    utm_campaign: 'compromiso_invierno_q4',
+    utm_content: 'carrusel_quilates',
+    landing_url: 'https://aurajoyas.com/compromiso',
+    referrer: 'https://instagram.com/',
+    ip_hash: 'hash_4412l',
+    status: 'cita_agendada',
+    sale_amount: 0.00,
+    currency: 'USD',
+    notes: 'Cita en showroom privado para elección de piedra central.',
+    attributed_at: new Date(Date.now() - 1 * 86400000).toISOString(),
+    closed_at: null,
+    created_at: new Date(Date.now() - 1 * 86400000).toISOString(),
   },
 ];
 
@@ -190,13 +400,20 @@ class AttributionStore {
 
   private ensureInitialized() {
     if (typeof window === 'undefined') return;
-    if (!localStorage.getItem(STORAGE_KEYS.ORGS)) {
-      localStorage.setItem(STORAGE_KEYS.ORGS, JSON.stringify(INITIAL_ORGS));
-    }
-    if (!localStorage.getItem(STORAGE_KEYS.CLIENTS)) {
+    try {
+      const storedClients = localStorage.getItem(STORAGE_KEYS.CLIENTS);
+      if (!storedClients || JSON.parse(storedClients).length < INITIAL_CLIENTS.length) {
+        localStorage.setItem(STORAGE_KEYS.CLIENTS, JSON.stringify(INITIAL_CLIENTS));
+      }
+      const storedLeads = localStorage.getItem(STORAGE_KEYS.LEADS);
+      if (!storedLeads || JSON.parse(storedLeads).length < INITIAL_LEADS.length) {
+        localStorage.setItem(STORAGE_KEYS.LEADS, JSON.stringify(INITIAL_LEADS));
+      }
+      if (!localStorage.getItem(STORAGE_KEYS.ORGS)) {
+        localStorage.setItem(STORAGE_KEYS.ORGS, JSON.stringify(INITIAL_ORGS));
+      }
+    } catch {
       localStorage.setItem(STORAGE_KEYS.CLIENTS, JSON.stringify(INITIAL_CLIENTS));
-    }
-    if (!localStorage.getItem(STORAGE_KEYS.LEADS)) {
       localStorage.setItem(STORAGE_KEYS.LEADS, JSON.stringify(INITIAL_LEADS));
     }
   }
@@ -238,20 +455,49 @@ class AttributionStore {
 
   public getClientByToken(secureToken: string): ClientRow | null {
     const clients = this.getClients();
-    return clients.find((c) => c.secure_token === secureToken && c.is_active) || null;
+    if (!secureToken) return clients[0] || null;
+
+    // 1. Coincidencia directa por token seguro
+    let found = clients.find((c) => c.secure_token === secureToken && c.is_active);
+    if (found) return found;
+
+    // 2. Coincidencia flexible por id o slug
+    const normalized = secureToken.toLowerCase().replace(/^tok_/, '');
+    found = clients.find((c) => 
+      c.id.toLowerCase() === normalized || 
+      c.id.toLowerCase().includes(normalized) ||
+      normalized.includes(c.id.toLowerCase()) ||
+      c.slug.toLowerCase().includes(normalized) ||
+      normalized.includes(c.slug.toLowerCase()) ||
+      c.secure_token.toLowerCase().includes(normalized)
+    );
+    if (found) return found;
+
+    // 3. Respaldo siempre activo para que la pantalla de recepción NUNCA aparezca vacía
+    return clients[0] || null;
   }
 
   public getClientByApiKey(apiKey: string): ClientRow | null {
     const clients = this.getClients();
-    return clients.find((c) => c.api_key === apiKey && c.is_active) || null;
+    return clients.find((c) => c.api_key === apiKey && c.is_active) || clients[0] || null;
   }
 
   public getLeads(clientId?: string, organizationId?: string): LeadRow[] {
     try {
       const raw = localStorage.getItem(STORAGE_KEYS.LEADS);
       let list: LeadRow[] = raw ? JSON.parse(raw) : INITIAL_LEADS;
+      if (!list || list.length === 0) {
+        list = INITIAL_LEADS;
+        localStorage.setItem(STORAGE_KEYS.LEADS, JSON.stringify(INITIAL_LEADS));
+      }
       if (clientId) {
-        list = list.filter((l) => l.client_id === clientId);
+        const matches = list.filter((l) => 
+          l.client_id === clientId ||
+          (clientId.includes('dental') && (l.client_id.includes('dental') || l.client_id.includes('sonrisas'))) ||
+          (clientId.includes('inmobiliaria') && (l.client_id.includes('inmobiliaria') || l.client_id.includes('valle'))) ||
+          (clientId.includes('joyeria') && (l.client_id.includes('joyeria') || l.client_id.includes('aura')))
+        );
+        return (matches.length > 0 ? matches : list).sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
       }
       if (organizationId) {
         list = list.filter((l) => l.organization_id === organizationId);

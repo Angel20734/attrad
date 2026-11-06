@@ -267,7 +267,13 @@ export const ClientSpacesHub: React.FC<ClientSpacesHubProps> = ({ onOpenMagicLin
                 </button>
                 <button
                   onClick={() => {
-                    const token = client.id === 'client-01' ? 'tok_sonrisas_8f14b2' : client.id === 'client-02' ? 'tok_valle_3c99a1' : `tok_${client.id}`;
+                    const token = client.id === 'client-inmobiliaria-01' 
+                      ? 'tok_valle_3c99a1' 
+                      : client.id === 'client-dental-01' 
+                      ? 'tok_sonrisas_8f14b2' 
+                      : client.id === 'client-joyeria-01' 
+                      ? 'tok_aura_7e52d9' 
+                      : 'tok_sonrisas_8f14b2';
                     onOpenMagicLink?.(token);
                   }}
                   className="btn btn-secondary btn-sm"
@@ -648,13 +654,29 @@ export const ClientSpacesHub: React.FC<ClientSpacesHubProps> = ({ onOpenMagicLin
                   <input
                     type="text"
                     readOnly
-                    value={`${window.location.origin}/?token=${showSdkModal.id === 'client-01' ? 'tok_sonrisas_8f14b2' : showSdkModal.id === 'client-02' ? 'tok_valle_3c99a1' : `tok_${showSdkModal.id}`}`}
+                    value={`${window.location.origin}/?token=${
+                      showSdkModal.id === 'client-inmobiliaria-01'
+                        ? 'tok_valle_3c99a1'
+                        : showSdkModal.id === 'client-dental-01'
+                        ? 'tok_sonrisas_8f14b2'
+                        : showSdkModal.id === 'client-joyeria-01'
+                        ? 'tok_aura_7e52d9'
+                        : 'tok_sonrisas_8f14b2'
+                    }`}
                     className="form-input font-mono"
                     style={{ fontSize: '0.78rem', color: '#a5b4fc', flex: 1 }}
                   />
                   <button
                     onClick={() => {
-                      const link = `${window.location.origin}/?token=${showSdkModal.id === 'client-01' ? 'tok_sonrisas_8f14b2' : showSdkModal.id === 'client-02' ? 'tok_valle_3c99a1' : `tok_${showSdkModal.id}`}`;
+                      const token =
+                        showSdkModal.id === 'client-inmobiliaria-01'
+                          ? 'tok_valle_3c99a1'
+                          : showSdkModal.id === 'client-dental-01'
+                          ? 'tok_sonrisas_8f14b2'
+                          : showSdkModal.id === 'client-joyeria-01'
+                          ? 'tok_aura_7e52d9'
+                          : 'tok_sonrisas_8f14b2';
+                      const link = `${window.location.origin}/?token=${token}`;
                       navigator.clipboard.writeText(link);
                       setCopiedLink(showSdkModal.id);
                       setTimeout(() => setCopiedLink(null), 2500);

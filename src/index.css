@@ -278,3 +278,40 @@ select option:checked {
 .animate-pulse-glow {
   animation: pulseGlow 2.5s infinite ease-in-out;
 }
+
+/* Layout Principal con Barra Lateral Izquierda */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--bg-main, #090d16);
+  color: var(--text-main, #f8fafc);
+  overflow-x: hidden;
+}
+
+.main-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 1024px) {
+  .main-wrapper {
+    padding-left: 275px;
+  }
+}
+
+.main-content {
+  flex: 1;
+  padding: 1.5rem;
+  max-width: 1750px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 1rem 0.75rem;
+  }
+}
