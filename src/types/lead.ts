@@ -1,4 +1,12 @@
-export type LifecycleStatus = 'nuevo' | 'potencial' | 'cliente_contrato' | 'inactivo';
+export type LifecycleStatus = 'nuevo' | 'contacto' | 'demo' | 'propuesta' | 'cliente_contrato' | 'inactivo' | 'potencial';
+
+export interface ActivityItem {
+  id: string;
+  type: 'call' | 'demo' | 'email' | 'meeting' | 'task';
+  title: string;
+  dueTime: string;
+  completed: boolean;
+}
 
 export interface Touchpoint {
   id: string;
@@ -14,6 +22,8 @@ export interface Lead {
   tenantId: string; // Para compatibilidad
   agencyId?: string;
   clientSpaceId?: string; // ID del espacio de cliente al que pertenece el comprador final
+  dealTitle?: string; // Título comercial del trato (ej: Bringit media agency deal)
+  company?: string; // Empresa o cuenta comercial
   name: string;
   phone: string;
   email: string;
@@ -30,4 +40,6 @@ export interface Lead {
   assignedTo?: string;
   lastMessageAt: string;
   unreadCount?: number;
+  nextActivity?: ActivityItem;
+  activities?: ActivityItem[];
 }

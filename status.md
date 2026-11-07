@@ -45,6 +45,14 @@ Plataforma B2B Multi-tenant de Inteligencia de Atribución de Anuncios ("First-T
   - Resuelto el problema de tokens no coincidentes: sincronización total de identificadores y tokens para todos los clientes (`tok_sonrisas_8f14b2`, `tok_valle_3c99a1`, `tok_aura_7e52d9`, `tok_saas_4d88e2`).
   - Pre-población de 16 prospectos realistas con nombres, teléfonos, campañas, UTMs y estados variados (nuevos, citas agendadas y ventas confirmadas con montos $) para que ningún cliente ni enlace de recepción aparezca vacío.
   - Algoritmo resiliente en `getClientByToken`: resolución por token exacto, slug, ID o fallback seguro al cliente principal para garantizar que la pantalla nunca falle ni quede en blanco.
+- **Rediseño Estructural Estilo Pipedrive (Deals & Pipeline Workspace)**:
+  - **Dock Lateral Izquierdo Delgado (60px)** en [`Sidebar.tsx`](file:///c:/Users/angel/Desktop/TRABAJOS%20MIOS/Anti%20IDE/Proyecto1/src/components/layout/Sidebar.tsx): Monograma Attrad superior, navegación por iconos con tooltips flotantes, píldora azul activa (`$ / Kanban`), badges de alertas en anuncios (`27`) y clientes (`4`), accesos a Magic Link, reportes y herramientas de rol/reset.
+  - **Top Header Bar** en [`TopHeader.tsx`](file:///c:/Users/angel/Desktop/TRABAJOS%20MIOS/Anti%20IDE/Proyecto1/src/components/layout/TopHeader.tsx): Título de página (`Deals`), barra de búsqueda global central redondeada (`Search Attrad...`) con botón rápido `(+)`, selector de cliente en píldora y widget de perfil (`Phyllis Yang / Silicon Links Inc`).
+  - **Sub-barra de Herramientas de Pipeline** en [`PipelineKanban.tsx`](file:///c:/Users/angel/Desktop/TRABAJOS%20MIOS/Anti%20IDE/Proyecto1/src/components/pipeline/PipelineKanban.tsx): Alternador de vista (`Kanban` vs `Lista` vs `Historial`), botón verde de acción `+ Deal` con modal de alta, métricas agregadas en vivo (`$34,900 · 13 deals`), selector de pipeline de cliente con lápiz de edición y filtros.
+  - **Flujo de Etapas Chevron Conectadas**: 5 columnas horizontales con flechas de avance (`Qualified`, `Contact Made`, `Demo Scheduled`, `Proposal Made`, `Negotiations Started / Closed`) con iconos de balanza y totales por columna.
+  - **Tarjetas de Tratos y Popover de Actividad**: Tarjetas con indicador de color superior, badge verde `WON`, avatar con monto en dólares, y popover interactivo idéntico al de la imagen con llamadas de seguimiento (`Follow-up Call`), citas (`Product Demo`), anuncio de origen First-Touch y avance de etapas.
+  - **Verificación Técnica**: `tsc --noEmit` ✅ 0 errores | `npm run build` ✅ código 0.
+
 - **Verificación Técnica & Auditoría Cero Errores**:
   - `tsc --noEmit`: 0 errores.
   - `npm run build`: 1603 módulos transformados exitosamente en 2.47s (código 0).

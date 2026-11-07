@@ -1,22 +1,16 @@
 import React, { useState } from 'react';
 import { useAttrad } from '../../context/AttradContext';
 import {
-  ShieldAlert,
-  LayoutGrid,
-  Kanban,
-  RotateCcw,
-  Sparkles,
-  LogOut,
-  FileText,
-  ChevronDown,
+  DollarSign,
+  TrendingUp,
+  Megaphone,
   Layers,
   ShieldCheck,
-  TrendingUp,
-  ExternalLink,
-  X,
-  Building2,
-  Copy,
-  Check,
+  FileText,
+  ShieldAlert,
+  RotateCcw,
+  LogOut,
+  UserCheck,
 } from 'lucide-react';
 import { ClientReportModal } from '../reports/ClientReportModal';
 
@@ -37,16 +31,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
     setActiveTab,
     clientSpaces,
     activeClientSpaceId,
-    setActiveClientSpaceId,
-    activeClientSpace,
-    currentUser,
     logout,
     resetAllData,
     switchRoleQuickDemo,
   } = useAttrad();
 
   const [showReportModal, setShowReportModal] = useState(false);
-  const [copiedLink, setCopiedLink] = useState(false);
 
   // Token de Magic Link del cliente activo
   const activeClientToken =
@@ -57,13 +47,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
       : activeClientSpaceId === 'client-joyeria-01'
       ? 'tok_aura_7e52d9'
       : 'tok_sonrisas_8f14b2';
-
-  const handleCopyMagicLink = () => {
-    const url = `${window.location.origin}/?token=${activeClientToken}`;
-    navigator.clipboard.writeText(url);
-    setCopiedLink(true);
-    setTimeout(() => setCopiedLink(false), 2000);
-  };
 
   const handleNavClick = (tab: typeof activeTab) => {
     setActiveTab(tab);
@@ -80,523 +63,318 @@ export const Sidebar: React.FC<SidebarProps> = ({
         />
       )}
 
-      {/* Barra Lateral Izquierda */}
+      {/* Dock Lateral Estilo Pipedrive (Slim Icon Dock 64px) */}
       <aside
-        className={`sidebar-wrapper ${
+        className={`pipedrive-sidebar ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
-        } lg:translate-x-0 transition-transform duration-300 ease-in-out`}
+        } lg:translate-x-0`}
       >
-        <div className="sidebar-inner">
-          {/* 1. Encabezado de Marca */}
-          <div className="sidebar-brand-header">
-            <div className="brand-logo shadow-lg shadow-indigo-600/30">
-              <Sparkles className="brand-icon" size={20} />
+        <div className="sidebar-dock">
+          {/* Logo Superior */}
+          <div className="dock-logo-container">
+            <div className="dock-logo-badge" title="ATTRAD Platform">
+              <span className="logo-letter">P</span>
             </div>
-            <div className="flex-1 min-w-0">
-              <div className="brand-title">ATTRAD</div>
-              <div className="brand-subtitle">First-Touch Ad Intelligence</div>
-            </div>
-            <button
-              onClick={onClose}
-              className="lg:hidden text-slate-400 hover:text-white p-1"
-            >
-              <X size={18} />
-            </button>
           </div>
 
-          {/* 2. Selector de Cliente Activo (En modo Agencia) */}
-          {userRole === 'agency_user' && clientSpaces.length > 0 && (
-            <div className="client-switcher-card">
-              <div className="client-switcher-label">ESPACIO DE CLIENTE ACTIVO</div>
-              <div className="client-switcher-dropdown">
-                <span className="client-avatar-emoji">
-                  {activeClientSpace?.logoEmoji || '🏢'}
-                </span>
-                <select
-                  value={activeClientSpaceId}
-                  onChange={(e) => setActiveClientSpaceId(e.target.value)}
-                  className="client-select-native"
-                >
-                  {clientSpaces.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name} ({c.categoryLabel})
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown size={14} className="client-select-arrow" />
-              </div>
-            </div>
-          )}
-
-          {/* 3. Menú de Navegación Vertical */}
-          <div className="sidebar-nav-container">
-            <div className="nav-group-title">
-              {userRole === 'super_admin' ? 'ADMINISTRACIÓN' : 'ANÁLISIS & OPERACIONES'}
-            </div>
-
-            <nav className="sidebar-nav">
-              {userRole === 'super_admin' ? (
+          {/* Menú de Iconos Verticales */}
+          <nav className="dock-nav-items">
+            {userRole === 'super_admin' ? (
+              <button
+                className={`dock-btn ${activeTab === 'admin' ? 'active' : ''}`}
+                onClick={() => handleNavClick('admin')}
+                title="Panel Super Admin"
+              >
+                <ShieldAlert size={20} />
+                <span className="dock-tooltip">Super Admin</span>
+              </button>
+            ) : (
+              <>
+                {/* 1. Tratos & Pipeline (Deals) */}
                 <button
-                  className={`nav-item ${activeTab === 'admin' ? 'active' : ''}`}
-                  onClick={() => handleNavClick('admin')}
+                  className={`dock-btn ${activeTab === 'pipeline' ? 'active' : ''}`}
+                  onClick={() => handleNavClick('pipeline')}
+                  title="Pipeline de Tratos & Compradores"
                 >
-                  <ShieldAlert size={18} />
-                  <span>Panel Super Admin</span>
+                  <DollarSign size={20} />
+                  <span className="dock-tooltip">Tratos & Pipeline</span>
                 </button>
-              ) : (
-                <>
-                  <button
-                    className={`nav-item ${activeTab === 'roi' ? 'active' : ''}`}
-                    onClick={() => handleNavClick('roi')}
-                  >
-                    <TrendingUp size={18} />
-                    <span>Atribución & ROI</span>
-                    <span className="nav-badge-pill">Central</span>
-                  </button>
 
-                  <button
-                    className={`nav-item ${activeTab === 'clients' ? 'active' : ''}`}
-                    onClick={() => handleNavClick('clients')}
-                  >
-                    <Layers size={18} />
-                    <span>Mis Clientes</span>
-                    <span className="nav-counter">{clientSpaces.length}</span>
-                  </button>
+                {/* 2. Atribución & ROI */}
+                <button
+                  className={`dock-btn ${activeTab === 'roi' ? 'active' : ''}`}
+                  onClick={() => handleNavClick('roi')}
+                  title="Atribución de Ventas & ROI"
+                >
+                  <TrendingUp size={20} />
+                  <span className="dock-tooltip">Atribución & ROI</span>
+                </button>
 
-                  <button
-                    className={`nav-item ${activeTab === 'ads' ? 'active' : ''}`}
-                    onClick={() => handleNavClick('ads')}
-                  >
-                    <LayoutGrid size={18} />
-                    <span>Hub de Anuncios</span>
-                  </button>
+                {/* 3. Hub de Anuncios con Badge */}
+                <button
+                  className={`dock-btn ${activeTab === 'ads' ? 'active' : ''}`}
+                  onClick={() => handleNavClick('ads')}
+                  title="Hub de Anuncios & Creativos"
+                >
+                  <div className="relative">
+                    <Megaphone size={20} />
+                    <span className="dock-badge">27</span>
+                  </div>
+                  <span className="dock-tooltip">Hub de Anuncios</span>
+                </button>
 
-                  <button
-                    className={`nav-item ${activeTab === 'pipeline' ? 'active' : ''}`}
-                    onClick={() => handleNavClick('pipeline')}
-                  >
-                    <Kanban size={18} />
-                    <span>Pipeline Comercial</span>
-                  </button>
-                </>
-              )}
-            </nav>
+                {/* 4. Espacios de Clientes */}
+                <button
+                  className={`dock-btn ${activeTab === 'clients' ? 'active' : ''}`}
+                  onClick={() => handleNavClick('clients')}
+                  title="Espacios de Clientes"
+                >
+                  <div className="relative">
+                    <Layers size={20} />
+                    <span className="dock-badge-subtle">{clientSpaces.length}</span>
+                  </div>
+                  <span className="dock-tooltip">Espacios de Clientes</span>
+                </button>
 
-            {/* 4. Herramientas Rápidas del Cliente */}
-            {userRole === 'agency_user' && (
-              <div className="pt-4">
-                <div className="nav-group-title">ACCESOS DIRECTOS CLIENTE</div>
-                <div className="space-y-1.5">
-                  {onOpenMagicLink && (
-                    <button
-                      onClick={() => {
-                        onOpenMagicLink(activeClientToken);
-                        onClose();
-                      }}
-                      className="tool-btn magic-link-tool"
-                      title="Abrir portal de confirmación de ventas para recepción"
-                    >
-                      <ShieldCheck size={16} className="text-emerald-400" />
-                      <div className="text-left flex-1 min-w-0">
-                        <div className="font-bold text-xs text-emerald-300">Portal Magic Link</div>
-                        <div className="text-[10px] text-emerald-400/80 truncate">
-                          Recepción {activeClientSpace?.name || 'Cliente'}
-                        </div>
-                      </div>
-                    </button>
-                  )}
-
+                {/* 5. Portal Magic Link */}
+                {onOpenMagicLink && (
                   <button
+                    className="dock-btn"
                     onClick={() => {
-                      setShowReportModal(true);
+                      onOpenMagicLink(activeClientToken);
                       onClose();
                     }}
-                    className="tool-btn report-tool"
-                    title="Generar reporte ejecutivo imprimible"
+                    title="Abrir Portal Magic Link (Recepción)"
                   >
-                    <FileText size={16} className="text-indigo-400" />
-                    <div className="text-left flex-1 min-w-0">
-                      <div className="font-bold text-xs text-white">Reporte Ejecutivo</div>
-                      <div className="text-[10px] text-slate-400">PDF / Imprimible</div>
-                    </div>
+                    <ShieldCheck size={20} className="text-emerald-400" />
+                    <span className="dock-tooltip">Portal Magic Link</span>
                   </button>
+                )}
 
-                  <a
-                    href="/test-landing.html"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="tool-btn simulator-tool"
-                    title="Simular clic en anuncio con código para WhatsApp"
-                  >
-                    <ExternalLink size={16} className="text-cyan-400" />
-                    <div className="text-left flex-1 min-w-0">
-                      <div className="font-bold text-xs text-white">Simular Anuncio</div>
-                      <div className="text-[10px] text-slate-400">Tracking WhatsApp</div>
-                    </div>
-                  </a>
-                </div>
-              </div>
+                {/* 6. Reportes Ejecutivos */}
+                <button
+                  className="dock-btn"
+                  onClick={() => {
+                    setShowReportModal(true);
+                    onClose();
+                  }}
+                  title="Generar Reporte de Cliente"
+                >
+                  <FileText size={20} className="text-cyan-400" />
+                  <span className="dock-tooltip">Reporte Ejecutivo</span>
+                </button>
+              </>
             )}
-          </div>
+          </nav>
 
-          {/* 5. Pie de la Barra Lateral: Perfil y Controles */}
-          <div className="sidebar-footer">
-            <div className="user-profile-card">
-              <div className="user-avatar-badge">
-                {userRole === 'super_admin' ? 'SA' : 'AG'}
-                <span className="online-indicator" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="font-bold text-xs text-white truncate">
-                  {userRole === 'super_admin'
-                    ? 'Super Admin (Tú)'
-                    : currentUser?.name?.split('(')[0] || 'Agencia Nexus'}
-                </div>
-                <div className="text-[10px] text-slate-400 truncate">
-                  {userRole === 'super_admin' ? 'Dueño de Plataforma' : 'Empresa de Marketing'}
-                </div>
-              </div>
-            </div>
+          {/* Iconos Inferiores (Herramientas, Rol, Logout) */}
+          <div className="dock-bottom-items">
+            {/* Alternar Rol Demo */}
+            <button
+              onClick={() => {
+                switchRoleQuickDemo(userRole === 'super_admin' ? 'agency_user' : 'super_admin');
+                onClose();
+              }}
+              className="dock-btn dock-btn-subtle"
+              title={`Alternar a vista ${userRole === 'super_admin' ? 'Agencia' : 'Super Admin'}`}
+            >
+              <UserCheck size={18} />
+              <span className="dock-tooltip">
+                Rol: {userRole === 'super_admin' ? 'Super Admin' : 'Agencia'}
+              </span>
+            </button>
 
-            {/* Alternar Rol de Prueba */}
-            <div className="role-switch-row">
-              <button
-                onClick={() => switchRoleQuickDemo('agency_user')}
-                className={`role-tab-btn ${userRole === 'agency_user' ? 'active' : ''}`}
-                title="Cambiar a vista Agencia"
-              >
-                <Building2 size={13} />
-                <span>Agencia</span>
-              </button>
-              <button
-                onClick={() => switchRoleQuickDemo('super_admin')}
-                className={`role-tab-btn ${userRole === 'super_admin' ? 'active' : ''}`}
-                title="Cambiar a vista Super Admin"
-              >
-                <ShieldAlert size={13} />
-                <span>Admin</span>
-              </button>
-            </div>
+            {/* Reiniciar Datos */}
+            <button
+              onClick={() => {
+                if (confirm('¿Restablecer datos demo a los valores iniciales?')) {
+                  resetAllData();
+                  window.location.reload();
+                }
+              }}
+              className="dock-btn dock-btn-subtle"
+              title="Restablecer Datos Demo"
+            >
+              <RotateCcw size={18} />
+              <span className="dock-tooltip">Restablecer Datos</span>
+            </button>
 
-            {/* Acciones de Footer */}
-            <div className="flex items-center gap-1.5 pt-1">
-              <button
-                onClick={handleCopyMagicLink}
-                className="action-btn flex-1"
-                title="Copiar Magic Link de este cliente al portapapeles"
-              >
-                {copiedLink ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
-                <span>{copiedLink ? 'Copiado' : 'Link'}</span>
-              </button>
-
-              <button
-                onClick={() => {
-                  if (window.confirm('¿Deseas restaurar todos los datos demo iniciales?')) {
-                    resetAllData();
-                  }
-                }}
-                className="action-btn"
-                title="Restaurar datos demo iniciales"
-              >
-                <RotateCcw size={14} />
-              </button>
-
-              <button
-                onClick={logout}
-                className="action-btn text-rose-400 hover:text-rose-300 hover:bg-rose-500/10"
-                title="Cerrar sesión"
-              >
-                <LogOut size={14} />
-              </button>
-            </div>
+            {/* Cerrar Sesión */}
+            <button
+              onClick={logout}
+              className="dock-btn dock-btn-danger"
+              title="Cerrar Sesión"
+            >
+              <LogOut size={18} />
+              <span className="dock-tooltip">Cerrar Sesión</span>
+            </button>
           </div>
         </div>
       </aside>
 
       {/* Modal de Reporte Ejecutivo */}
-      {showReportModal && <ClientReportModal onClose={() => setShowReportModal(false)} />}
+      {showReportModal && (
+        <ClientReportModal onClose={() => setShowReportModal(false)} />
+      )}
 
       <style>{`
-        .sidebar-wrapper {
+        .pipedrive-sidebar {
           position: fixed;
           top: 0;
           left: 0;
           bottom: 0;
-          width: 275px;
-          background: #0b0f19;
+          width: 60px;
+          background: #171b26;
           border-right: 1px solid rgba(255, 255, 255, 0.08);
           z-index: 50;
-        }
-        .sidebar-inner {
-          display: flex;
-          flex-direction: column;
-          height: 100%;
-          padding: 1.25rem 1rem;
-          gap: 1rem;
-        }
-        .sidebar-brand-header {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          padding-bottom: 0.75rem;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        .brand-logo {
-          width: 38px;
-          height: 38px;
-          border-radius: 12px;
-          background: linear-gradient(135deg, #4f46e5, #7c3aed);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #ffffff;
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          flex-shrink: 0;
-        }
-        .brand-title {
-          font-size: 1.25rem;
-          font-weight: 800;
-          letter-spacing: -0.02em;
-          color: #ffffff;
-          line-height: 1.1;
-        }
-        .brand-subtitle {
-          font-size: 0.65rem;
-          color: #94a3b8;
-          font-weight: 500;
+          transition: transform 0.25s ease-in-out;
         }
 
-        /* Selector de Cliente */
-        .client-switcher-card {
-          background: rgba(15, 23, 42, 0.75);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          border-radius: 14px;
-          padding: 0.65rem 0.75rem;
-        }
-        .client-switcher-label {
-          font-size: 0.62rem;
-          font-weight: 700;
-          color: #64748b;
-          letter-spacing: 0.04em;
-          margin-bottom: 0.35rem;
-        }
-        .client-switcher-dropdown {
-          position: relative;
+        .sidebar-dock {
           display: flex;
+          flex-direction: column;
           align-items: center;
+          height: 100%;
+          padding: 0.75rem 0.35rem;
           gap: 0.5rem;
         }
-        .client-avatar-emoji {
-          font-size: 1.1rem;
-        }
-        .client-select-native {
-          appearance: none;
-          background: transparent;
-          border: none;
-          color: #f1f5f9;
-          font-size: 0.8rem;
-          font-weight: 700;
-          padding-right: 1.5rem;
-          cursor: pointer;
-          outline: none;
-          width: 100%;
-        }
-        .client-select-native option {
-          background-color: #0f172a;
-          color: #ffffff;
-        }
-        .client-select-arrow {
-          position: absolute;
-          right: 0;
-          pointer-events: none;
-          color: #94a3b8;
+
+        .dock-logo-container {
+          padding-bottom: 0.5rem;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+          margin-bottom: 0.25rem;
         }
 
-        /* Navegación */
-        .sidebar-nav-container {
-          flex: 1;
-          overflow-y: auto;
-          display: flex;
-          flex-direction: column;
-          gap: 0.4rem;
-        }
-        .nav-group-title {
-          font-size: 0.62rem;
-          font-weight: 700;
-          color: #64748b;
-          letter-spacing: 0.05em;
-          padding: 0.25rem 0.5rem;
-        }
-        .sidebar-nav {
-          display: flex;
-          flex-direction: column;
-          gap: 0.3rem;
-        }
-        .nav-item {
+        .dock-logo-badge {
+          width: 38px;
+          height: 38px;
+          background: #2b334a;
+          color: #ffffff;
+          border-radius: 10px;
           display: flex;
           align-items: center;
-          gap: 0.75rem;
-          padding: 0.65rem 0.85rem;
-          border-radius: 12px;
-          font-size: 0.82rem;
-          font-weight: 600;
-          color: #94a3b8;
-          border: none;
-          background: transparent;
+          justify-content: center;
+          font-weight: 900;
+          font-size: 1.3rem;
+          letter-spacing: -0.05em;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
           cursor: pointer;
-          transition: all 0.2s ease;
-          width: 100%;
-          text-align: left;
-        }
-        .nav-item:hover {
-          color: #ffffff;
-          background: rgba(255, 255, 255, 0.05);
-        }
-        .nav-item.active {
-          color: #ffffff;
-          background: #4f46e5;
-          box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
-        }
-        .nav-badge-pill {
-          margin-left: auto;
-          font-size: 0.62rem;
-          font-weight: 700;
-          background: rgba(255, 255, 255, 0.2);
-          color: #ffffff;
-          padding: 0.15rem 0.4rem;
-          border-radius: 6px;
-        }
-        .nav-counter {
-          margin-left: auto;
-          font-size: 0.7rem;
-          font-weight: 700;
-          background: rgba(255, 255, 255, 0.08);
-          color: #cbd5e1;
-          padding: 0.1rem 0.45rem;
-          border-radius: 999px;
         }
 
-        /* Herramientas Rápidas */
-        .tool-btn {
-          display: flex;
-          align-items: center;
-          gap: 0.65rem;
-          padding: 0.6rem 0.75rem;
-          border-radius: 12px;
-          background: rgba(15, 23, 42, 0.6);
-          border: 1px solid rgba(255, 255, 255, 0.06);
-          cursor: pointer;
-          transition: all 0.2s ease;
-          width: 100%;
-          text-decoration: none;
-        }
-        .tool-btn:hover {
-          background: rgba(30, 41, 59, 0.8);
-          border-color: rgba(255, 255, 255, 0.12);
+        .logo-letter {
           transform: translateY(-1px);
         }
-        .magic-link-tool {
-          border-color: rgba(16, 185, 129, 0.25);
-          background: rgba(16, 185, 129, 0.06);
-        }
-        .magic-link-tool:hover {
-          background: rgba(16, 185, 129, 0.12);
-          border-color: rgba(16, 185, 129, 0.4);
-        }
 
-        /* Footer */
-        .sidebar-footer {
-          padding-top: 0.75rem;
-          border-top: 1px solid rgba(255, 255, 255, 0.08);
+        .dock-nav-items {
           display: flex;
           flex-direction: column;
-          gap: 0.6rem;
-        }
-        .user-profile-card {
-          display: flex;
           align-items: center;
-          gap: 0.65rem;
-          padding: 0.5rem 0.65rem;
-          background: rgba(15, 23, 42, 0.6);
-          border: 1px solid rgba(255, 255, 255, 0.06);
-          border-radius: 12px;
+          gap: 0.4rem;
+          flex: 1;
+          width: 100%;
         }
-        .user-avatar-badge {
-          width: 32px;
-          height: 32px;
-          border-radius: 10px;
-          background: linear-gradient(135deg, #3730a3, #4338ca);
-          color: #c7d2fe;
-          font-weight: 800;
-          font-size: 0.75rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+
+        .dock-btn {
           position: relative;
-          flex-shrink: 0;
-        }
-        .online-indicator {
-          width: 7px;
-          height: 7px;
-          border-radius: 50%;
-          background: #10b981;
-          position: absolute;
-          bottom: -1px;
-          right: -1px;
-          border: 2px solid #0f172a;
-        }
-        .role-switch-row {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 0.35rem;
-          background: rgba(15, 23, 42, 0.8);
-          padding: 0.25rem;
+          width: 44px;
+          height: 44px;
           border-radius: 10px;
-          border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .role-tab-btn {
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 0.35rem;
-          padding: 0.35rem;
-          border-radius: 8px;
-          font-size: 0.72rem;
-          font-weight: 700;
           color: #94a3b8;
-          border: none;
           background: transparent;
+          border: none;
           cursor: pointer;
-          transition: all 0.15s ease;
+          transition: all 0.18s ease;
         }
-        .role-tab-btn:hover {
+
+        .dock-btn:hover {
           color: #ffffff;
-        }
-        .role-tab-btn.active {
-          background: #312e81;
-          color: #e0e7ff;
-        }
-        .action-btn {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.35rem;
-          padding: 0.45rem 0.65rem;
-          border-radius: 8px;
-          font-size: 0.72rem;
-          font-weight: 600;
-          color: #cbd5e1;
-          background: rgba(255, 255, 255, 0.04);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          cursor: pointer;
-          transition: all 0.15s ease;
-        }
-        .action-btn:hover {
           background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Botón Activo Estilo Pipedrive (Píldora Azul Sólida con Icono Blanco) */
+        .dock-btn.active {
+          background: #2563eb;
           color: #ffffff;
+          box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+        }
+
+        .dock-btn-subtle {
+          color: #64748b;
+        }
+        .dock-btn-subtle:hover {
+          color: #cbd5e1;
+        }
+
+        .dock-btn-danger:hover {
+          color: #f87171;
+          background: rgba(239, 68, 68, 0.12);
+        }
+
+        .dock-badge {
+          position: absolute;
+          top: -4px;
+          right: -6px;
+          background: #ef4444;
+          color: white;
+          font-size: 0.65rem;
+          font-weight: 800;
+          padding: 1px 4px;
+          border-radius: 9999px;
+          border: 2px solid #171b26;
+          line-height: 1;
+        }
+
+        .dock-badge-subtle {
+          position: absolute;
+          top: -3px;
+          right: -5px;
+          background: #3b82f6;
+          color: white;
+          font-size: 0.62rem;
+          font-weight: 700;
+          padding: 1px 4px;
+          border-radius: 9999px;
+          line-height: 1;
+        }
+
+        .dock-bottom-items {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.35rem;
+          padding-top: 0.5rem;
+          border-top: 1px solid rgba(255, 255, 255, 0.06);
+          width: 100%;
+        }
+
+        /* Tooltip flotante al pasar el cursor */
+        .dock-tooltip {
+          position: absolute;
+          left: 56px;
+          background: #0f172a;
+          color: #f8fafc;
+          font-size: 0.75rem;
+          font-weight: 600;
+          padding: 0.35rem 0.65rem;
+          border-radius: 6px;
+          white-space: nowrap;
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          opacity: 0;
+          pointer-events: none;
+          transform: translateX(-4px);
+          transition: all 0.15s ease;
+          z-index: 100;
+        }
+
+        .dock-btn:hover .dock-tooltip {
+          opacity: 1;
+          transform: translateX(0);
         }
       `}</style>
     </>
   );
 };
-

@@ -87,7 +87,7 @@ const AppContent: React.FC = () => {
           onOpenReportModal={() => setShowGlobalReportModal(true)}
         />
 
-        <main className="main-content">
+        <main className={`main-content ${activeTab === 'pipeline' ? 'p-0' : ''}`}>
           <ErrorBoundary>
             {userRole === 'super_admin' && <SuperAdminPanel />}
             {userRole === 'agency_user' && activeTab === 'roi' && (
@@ -132,19 +132,22 @@ const AppContent: React.FC = () => {
         }
         @media (min-width: 1024px) {
           .main-wrapper {
-            padding-left: 275px;
+            padding-left: 60px;
           }
         }
         .main-content {
           flex: 1;
-          padding: 1.5rem;
-          max-width: 1750px;
+          padding: 1.25rem;
+          max-width: 100%;
           width: 100%;
           margin: 0 auto;
         }
+        .main-content.p-0 {
+          padding: 0 !important;
+        }
         @media (max-width: 768px) {
           .main-content {
-            padding: 1rem 0.75rem;
+            padding: 0.75rem 0.5rem;
           }
         }
       `}</style>
