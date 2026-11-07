@@ -11,6 +11,7 @@ import { AdHub } from './components/ad-hub/AdHub';
 import { PipelineKanban } from './components/pipeline/PipelineKanban';
 import { AgencyROIHub } from './components/agency/AgencyROIHub';
 import { ClientReportModal } from './components/reports/ClientReportModal';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 
 const AppContent: React.FC = () => {
   const { currentUser, userRole, activeTab, activeTenant } = useAttrad();
@@ -87,18 +88,26 @@ const AppContent: React.FC = () => {
         />
 
         <main className="main-content">
-          {userRole === 'super_admin' && activeTab === 'admin' && <SuperAdminPanel />}
-          {userRole === 'agency_user' && activeTab === 'roi' && (
-            <AgencyROIHub
-              currentAgencyId={currentUser.agencyId || 'org-nexus'}
-              onOpenMagicLink={(tok: string) => setMagicLinkToken(tok)}
-            />
-          )}
-          {userRole === 'agency_user' && activeTab === 'clients' && (
-            <ClientSpacesHub onOpenMagicLink={(tok: string) => setMagicLinkToken(tok)} />
-          )}
-          {activeTab === 'ads' && <AdHub />}
-          {activeTab === 'pipeline' && <PipelineKanban />}
+          <ErrorBoundary>
+            {userRole === 'super_admin' && <SuperAdminPanel />}
+            {userRole === 'agency_user' && activeTab === 'roi' && (
+              <AgencyROIHub
+                currentAgencyId={currentUser.agencyId || 'org-nexus'}
+                onOpenMagicLink={(tok: string) => setMagicLinkToken(tok)}
+              />
+            )}
+            {userRole === 'agency_user' && activeTab === 'clients' && (
+              <ClientSpacesHub onOpenMagicLink={(tok: string) => setMagicLinkToken(tok)} />
+            )}
+            {userRole === 'agency_user' && activeTab === 'ads' && <AdHub />}
+            {userRole === 'agency_user' && activeTab === 'pipeline' && <PipelineKanban />}
+            {userRole === 'agency_user' && !['roi', 'clients', 'ads', 'pipeline'].includes(activeTab) && (
+              <AgencyROIHub
+                currentAgencyId={currentUser.agencyId || 'org-nexus'}
+                onOpenMagicLink={(tok: string) => setMagicLinkToken(tok)}
+              />
+            )}
+          </ErrorBoundary>
         </main>
       </div>
 
@@ -145,9 +154,11 @@ const AppContent: React.FC = () => {
 
 export const App: React.FC = () => {
   return (
-    <AttradProvider>
-      <AppContent />
-    </AttradProvider>
+    <ErrorBoundary fallbackTitle="Ocurrió un error en la aplicación principal">
+      <AttradProvider>
+        <AppContent />
+      </AttradProvider>
+    </ErrorBoundary>
   );
 };
 

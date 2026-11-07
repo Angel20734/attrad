@@ -119,14 +119,22 @@ export const AttradProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   // 2. Estado de Agencias (Super Admin)
   const [agencies, setAgencies] = useState<MarketingAgency[]>(() => {
-    const saved = localStorage.getItem('attrad_agencies');
-    return saved ? JSON.parse(saved) : INITIAL_AGENCIES;
+    try {
+      const saved = localStorage.getItem('attrad_agencies');
+      return saved ? JSON.parse(saved) : INITIAL_AGENCIES;
+    } catch {
+      return INITIAL_AGENCIES;
+    }
   });
 
   // 3. Estado de Espacios de Clientes (Empresas de Marketing)
   const [clientSpaces, setClientSpaces] = useState<ClientSpace[]>(() => {
-    const saved = localStorage.getItem('attrad_client_spaces');
-    return saved ? JSON.parse(saved) : INITIAL_CLIENT_SPACES;
+    try {
+      const saved = localStorage.getItem('attrad_client_spaces');
+      return saved ? JSON.parse(saved) : INITIAL_CLIENT_SPACES;
+    } catch {
+      return INITIAL_CLIENT_SPACES;
+    }
   });
 
   const [activeClientSpaceId, setActiveClientSpaceId] = useState<string>(() => {
@@ -136,14 +144,22 @@ export const AttradProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   // 4. Estado de Anuncios
   const [ads, setAds] = useState<AdItem[]>(() => {
-    const saved = localStorage.getItem('attrad_ads');
-    return saved ? JSON.parse(saved) : INITIAL_ADS;
+    try {
+      const saved = localStorage.getItem('attrad_ads');
+      return saved ? JSON.parse(saved) : INITIAL_ADS;
+    } catch {
+      return INITIAL_ADS;
+    }
   });
 
   // 5. Estado de Leads y Compradores Finales
   const [leads, setLeads] = useState<Lead[]>(() => {
-    const saved = localStorage.getItem('attrad_leads');
-    return saved ? JSON.parse(saved) : INITIAL_LEADS;
+    try {
+      const saved = localStorage.getItem('attrad_leads');
+      return saved ? JSON.parse(saved) : INITIAL_LEADS;
+    } catch {
+      return INITIAL_LEADS;
+    }
   });
 
   const [selectedLeadId, setSelectedLeadId] = useState<string | null>('lead-carlos-01');
@@ -462,6 +478,12 @@ export const AttradProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     localStorage.removeItem('attrad_active_client_space_id');
     localStorage.removeItem('attrad_ads');
     localStorage.removeItem('attrad_leads');
+    localStorage.removeItem('attrad_orgs');
+    localStorage.removeItem('attrad_clients');
+    localStorage.removeItem('attrad_organizations_v1');
+    localStorage.removeItem('attrad_clients_v1');
+    localStorage.removeItem('attrad_leads_v1');
+    localStorage.removeItem('_attrad_first_touch');
     setAgencies(INITIAL_AGENCIES);
     setClientSpaces(INITIAL_CLIENT_SPACES);
     setActiveClientSpaceId('client-inmobiliaria-01');
@@ -475,8 +497,8 @@ export const AttradProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const activeAgencyId = currentUser?.agencyId || 'agency-nexus-01';
   const activeAgency = agencies.find((a) => a.id === activeAgencyId);
 
-  // Espacio de cliente activo
-  const activeClientSpace = clientSpaces.find((c) => c.id === activeClientSpaceId);
+  // Espacio de cliente activo con fallback seguro
+  const activeClientSpace = clientSpaces.find((c) => c.id === activeClientSpaceId) || clientSpaces[0];
 
   // Anuncios del cliente activo
   const currentClientAds = ads.filter((a) => {
